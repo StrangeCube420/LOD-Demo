@@ -1,0 +1,80 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://LODSpatial.gd" type="Script" id=1]
+
+[sub_resource type="SphereMesh" id=4]
+radial_segments = 256
+rings = 128
+
+[sub_resource type="OpenSimplexNoise" id=9]
+
+[sub_resource type="NoiseTexture" id=10]
+width = 2008
+height = 2008
+seamless = true
+noise = SubResource( 9 )
+
+[sub_resource type="NoiseTexture" id=11]
+width = 4016
+height = 4016
+seamless = true
+as_normalmap = true
+noise = SubResource( 9 )
+
+[sub_resource type="OpenSimplexNoise" id=13]
+
+[sub_resource type="NoiseTexture" id=14]
+seamless = true
+noise = SubResource( 13 )
+
+[sub_resource type="SpatialMaterial" id=12]
+params_diffuse_mode = 1
+albedo_texture = SubResource( 10 )
+roughness_texture = SubResource( 14 )
+normal_enabled = true
+normal_scale = 2.5
+normal_texture = SubResource( 11 )
+
+[sub_resource type="SphereMesh" id=16]
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SpatialMaterial" id=18]
+flags_vertex_lighting = true
+params_diffuse_mode = 4
+params_specular_mode = 4
+albedo_texture = SubResource( 10 )
+metallic_specular = 0.0
+
+[sub_resource type="SphereMesh" id=17]
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereShape" id=15]
+
+[node name="LOD Thing" type="Spatial"]
+script = ExtResource( 1 )
+lod_0_max_distance = 15
+lod_1_max_distance = 80
+
+[node name="MeshInstance-lod0" type="MeshInstance" parent="."]
+mesh = SubResource( 4 )
+material/0 = SubResource( 12 )
+
+[node name="MeshInstance-lod1" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 16 )
+material/0 = SubResource( 18 )
+
+[node name="MeshInstance-lod2" type="MeshInstance" parent="."]
+visible = false
+cast_shadow = 0
+mesh = SubResource( 17 )
+material/0 = SubResource( 18 )
+
+[node name="Collision" type="StaticBody" parent="."]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape" type="CollisionShape" parent="Collision"]
+shape = SubResource( 15 )
